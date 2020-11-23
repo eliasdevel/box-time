@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>Exemplo de detecção de colisão</title>
+	<title>Time Box</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<link rel=stylesheet href="css/base.css" />
@@ -10,7 +10,7 @@
 <body>
 
 	<div id="message">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pontos:<span
-			id='score'></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vida:<span id='life'></span></div>
+			id='score'></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vidas:<span id='life'></span></div>
 
 	<script src="js/Three.js"></script>
 	<script src="js/Detector.js"></script>
@@ -28,13 +28,13 @@
 	<script src="js/info.js"></script>
 	<div id="infoButton"></div>
 	<div id="infoBox" title="Informações">
-		Controls:
+		Controles:
 		<ul>
 			<li>seta cima e baixo move no eixo Z
 			<li>seta esquerda e direita move no eixo X
 			<li>A/D: rotaciona esquerda e direita
 		</ul>
-		Notes:
+		Notas:
 		<br />
 		os raios de colisão originam se do centro dos cubos e vão até o vértice.
 		<br /><br />
@@ -55,7 +55,9 @@
 
 		// standard global variables
 		var container, scene, camera, renderer, controls, stats;
+		//variavel para entrada de teclado
 		var keyboard = new THREEx.KeyboardState();
+
 		var clock = new THREE.Clock();
 		// custom global variables
 
@@ -269,6 +271,7 @@
 			var moveDistance = 200 * delta; // 200 pixels per second
 			var rotateAngle = Math.PI / 2 * delta;   // pi/2 radians (90 degrees) per second
 
+			//Detecção de entrada de teclado 
 			if (keyboard.pressed("A"))
 				MovingCube.rotation.y += rotateAngle;
 			if (keyboard.pressed("D"))
@@ -298,7 +301,7 @@
 			//   HOWEVER: when the origin of the ray is within the target mesh, collisions do not occur
 			var originPoint = MovingCube.position.clone();
 
-
+			//Detecta se tem colisão de perda de vida
 			if (!haveCollision) {
 				for (var vertexIndex = 0; vertexIndex < MovingCube.geometry.vertices.length; vertexIndex++) {
 					var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
@@ -313,7 +316,7 @@
 				}
 			}
 			
-			//test if get score
+			//Detecta se tem colisão de pontuação
 			for (var vertexIndex = 0; vertexIndex < MovingCube.geometry.vertices.length; vertexIndex++) {
 				var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
 				var globalVertex = localVertex.applyMatrix4(MovingCube.matrix);
@@ -328,21 +331,20 @@
 
 
 			if (haveCollision) {
-
 				await gotColision();
 			}
 
-
+			//atualiza estados e controles
 			controls.update();
 			stats.update();
-
-
 		}
+
 
 		function render() {
 			renderer.render(scene, camera);
 		}
 
+		//função a ser excetada após obter colisão de perda de vida
 		async function gotColision() {
 			//move cube to te start
 			if (!haveCollision) {
@@ -362,7 +364,7 @@
 			var haveCollision = false;
 		}
 
-		
+		//função a ser excetada após obter pontuação
 		async function gotScore() {
 			//move cube to te start
 			if (!haveCollision) {
