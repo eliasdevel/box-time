@@ -10,7 +10,9 @@
 <body>
 
 	<div id="message">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pontos:<span
-			id='score'></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vidas:<span id='life'></span></div>
+			id='score'></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vidas:<span id='life'></span>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tempo Restante:<span id="demo"></span>
+		</div>
 
 	<script src="js/Three.js"></script>
 	<script src="js/Detector.js"></script>
@@ -66,8 +68,11 @@
 
 		var finihCollidableMeshList = [];
 
+		var secondsForDie = 30;
 		var arrowList = [];
 		var directionList = [];
+		var countDownDate = new Date();
+		countDownDate.setSeconds( countDownDate.getSeconds() + secondsForDie );
 
 		init();
 		animate();
@@ -143,7 +148,7 @@
 
 			//Muros da lateral
 			var wallSidesGeometry = new THREE.CubeGeometry(10, 50, 1000, 1, 1, 1);
-			var wallSidesMaterial = new THREE.MeshBasicMaterial({ color: 0x00808f });
+			var wallSidesMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
 
 			var wall = new THREE.Mesh(wallSidesGeometry, wallSidesMaterial);
 			wall.position.set(-500, 25, 0);
@@ -157,7 +162,7 @@
 
 			//Muros da frente atrás
 			var wallSidesGeometry = new THREE.CubeGeometry(1000, 50, 10, 1, 1, 1);
-			var wallSidesMaterial = new THREE.MeshBasicMaterial({ color: 0x00808f });
+			var wallSidesMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
 
 			var wall = new THREE.Mesh(wallSidesGeometry, wallSidesMaterial);
 			wall.position.set(0, 25, -500);
@@ -268,6 +273,7 @@
 		async function update() {
 
 			var delta = clock.getDelta(); // seconds.
+			
 			var moveDistance = 200 * delta; // 200 pixels per second
 			var rotateAngle = Math.PI / 2 * delta;   // pi/2 radians (90 degrees) per second
 
@@ -362,6 +368,7 @@
 			}
 
 			var haveCollision = false;
+			
 		}
 
 		//função a ser excetada após obter pontuação
@@ -374,13 +381,45 @@
 				await setScore();
 
 				await setLife();
-
-				
+				countDownDate = new Date();
+				secondsForDie = secondsForDie-2;
+				countDownDate.setSeconds( countDownDate.getSeconds() + secondsForDie );
 			}
 
 			var haveCollision = false;
 		}
 
+
+
+		
+
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+  // Get today's date and time
+  var now = new Date().getTime();
+
+  
+
+  // Find the distance between now and the count down date
+  var distance = countDownDate - now;
+
+  // Time calculations for days, hours, minutes and seconds
+
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  // Display the result in the element with id="demo"
+  document.getElementById("demo").innerHTML =  seconds + "s ";
+
+  // If the count down is finished, write some text
+  if (distance < 0) {
+	countDownDate = new Date();
+	countDownDate.setSeconds( countDownDate.getSeconds() + secondsForDie );
+
+    gotColision();
+  }
+}, 1000);
 
 	</script>
 
