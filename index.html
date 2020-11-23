@@ -138,6 +138,38 @@
 			scene.add(wall);
 			finihCollidableMeshList.push(wall);
 
+
+			//Muros da lateral
+			var wallSidesGeometry = new THREE.CubeGeometry(10, 50, 1000, 1, 1, 1);
+			var wallSidesMaterial = new THREE.MeshBasicMaterial({ color: 0x00808f });
+
+			var wall = new THREE.Mesh(wallSidesGeometry, wallSidesMaterial);
+			wall.position.set(-500, 25, 0);
+			scene.add(wall);
+			collidableMeshList.push(wall);
+
+			var wall = new THREE.Mesh(wallSidesGeometry, wallSidesMaterial);
+			wall.position.set(500, 25, 0);
+			scene.add(wall);
+			collidableMeshList.push(wall);
+
+			//Muros da frente atrás
+			var wallSidesGeometry = new THREE.CubeGeometry(1000, 50, 10, 1, 1, 1);
+			var wallSidesMaterial = new THREE.MeshBasicMaterial({ color: 0x00808f });
+
+			var wall = new THREE.Mesh(wallSidesGeometry, wallSidesMaterial);
+			wall.position.set(0, 25, -500);
+			scene.add(wall);
+			collidableMeshList.push(wall);
+
+			var wall = new THREE.Mesh(wallSidesGeometry, wallSidesMaterial);
+			wall.position.set(0, 25, 500);
+			scene.add(wall);
+			collidableMeshList.push(wall);
+
+
+
+			//Gera blocos de colisão na posição x=50 incrementando 100 em z para cada interação
 			for (i = 0; i < 5; i++) {
 				//Soom z n times to replicate walls
 				var wall = new THREE.Mesh(wallGeometry, wallMaterial);
@@ -149,6 +181,7 @@
 				scene.add(wall);
 			}
 
+			//Gera blocos de colisão na posição x=-250 incrementando 100 em z para cada interação
 			for (i = 0; i < 5; i++) {
 				//Soom z n times to replicate walls
 				var wall = new THREE.Mesh(wallGeometry, wallMaterial);
@@ -160,6 +193,7 @@
 				scene.add(wall);
 			}
 
+			//Gera blocos de colisão na posição x=-400 incrementando 100 em z para cada interação
 			for (i = 0; i < 5; i++) {
 				//Soom z n times to replicate walls
 				var wall = new THREE.Mesh(wallGeometry, wallMaterial);
@@ -171,6 +205,7 @@
 				scene.add(wall);
 			}
 
+			//Gera blocos de colisão na posição x=250 incrementando 100 em z para cada interação
 			for (i = 0; i < 5; i++) {
 				//Soom z n times to replicate walls
 				var wall = new THREE.Mesh(wallGeometry, wallMaterial);
@@ -182,6 +217,7 @@
 				scene.add(wall);
 			}
 
+			//Gera blocos de colisão na posição x=400 incrementando 100 em z para cada interação
 			for (i = 0; i < 5; i++) {
 				//Soom z n times to replicate walls
 				var wall = new THREE.Mesh(wallGeometry, wallMaterial);
