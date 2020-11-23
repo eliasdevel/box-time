@@ -62,6 +62,8 @@
 		var MovingCube;
 		var collidableMeshList = [];
 
+		var finihCollidableMeshList = [];
+
 		var arrowList = [];
 		var directionList = [];
 
@@ -129,6 +131,12 @@
 			var wallMaterial = new THREE.MeshBasicMaterial({ color: 0x00808f });
 			var wireMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true });
 
+			var wallFinishGeometry = new THREE.CubeGeometry(50, 10, 20, 1, 1, 1);
+			var wallFinishMaterial = new THREE.MeshBasicMaterial({ color: 0x008000 });
+			var wall = new THREE.Mesh(wallFinishGeometry, wallFinishMaterial);
+			wall.position.set(-450, 5, -450);
+			scene.add(wall);
+			finihCollidableMeshList.push(wall);
 
 			for (i = 0; i < 5; i++) {
 				//Soom z n times to replicate walls
@@ -209,19 +217,12 @@
 		function animate() {
 			requestAnimationFrame(animate);
 			render();
-			
-			if(haveCollision)
-			{
+			if (haveCollision) {
 				haveCollision = false;
 				update();
-			}else
-			{
+			} else {
 				update();
 			}
-
-			
-			
-			
 		}
 
 		var haveCollision = false;
@@ -275,6 +276,19 @@
 					}
 				}
 			}
+			
+			//test if get score
+			for (var vertexIndex = 0; vertexIndex < MovingCube.geometry.vertices.length; vertexIndex++) {
+				var localVertex = MovingCube.geometry.vertices[vertexIndex].clone();
+				var globalVertex = localVertex.applyMatrix4(MovingCube.matrix);
+				var directionVector = globalVertex.sub(MovingCube.position);
+
+				var ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
+				var collisionResults = ray.intersectObjects(finihCollidableMeshList);
+				if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) {
+					await gotScore();
+				}
+			}
 
 
 			if (haveCollision) {
@@ -307,6 +321,23 @@
 					alert('Fim de Jogo');
 					window.location.reload();
 				}
+			}
+
+			var haveCollision = false;
+		}
+
+		
+		async function gotScore() {
+			//move cube to te start
+			if (!haveCollision) {
+				await MovingCube.position.set(450, 25.1, 450);
+
+				score++;
+				await setScore();
+
+				await setLife();
+
+				
 			}
 
 			var haveCollision = false;
